@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload ZIP File</title>
+  <style>
+    .upload-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f2f2f2;
+    }
+
+    .upload-box {
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .upload-button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .upload-button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="upload-container">
+    <div class="upload-box">
+      <input type="file" id="fileInput" accept=".zip">
+      <button class="upload-button" onclick="uploadFile()">Upload</button>
+    </div>
+  </div>
+
+  <script>
+    function uploadFile() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (!file || file.type !== 'application/zip') {
+        alert('Please select a valid ZIP file.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      fetch('http://localhost:8080/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('File uploaded successfully!');
+        } else {
+          alert('Error uploading file. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while uploading the file. Please try again later.');
+      });
+    }
+  </script>
+</body>
+</html>
